@@ -24,6 +24,15 @@ def player(x, y):
     screen.blit(playerImg, (x, y))
 
 
+def playerBoundary():
+    global playerX
+    global playerY
+    if playerX <= 0:
+        playerX = 0
+    elif playerX >= 736:  # Cater for size of the player image
+        playerX = 736
+
+
 # Loop of the Game
 windowRunning = True
 while windowRunning:  # we can access QUIT event when the window is running
@@ -50,6 +59,7 @@ while windowRunning:  # we can access QUIT event when the window is running
 
     # After filling the screen with background color, draw the player image
     playerX += playerX_change  # Change the X coordinate
+    playerBoundary()  # Apply boundaries accordingly
     player(playerX, playerY)
 
     pygame.display.update()
