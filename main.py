@@ -28,6 +28,15 @@ enemyY = random.randint(50, 150)
 enemyX_change = 1.5
 enemyY_change = 40
 
+# Bullet image
+# Ready - you can't see the bullet on the screen
+# Fire - the bullet is currently moving
+bulletImg = pygame.image.load("images/bullet.png")
+bulletX = 0
+bulletY = 480
+bulletY_change = 5
+bullet_state = "ready"
+
 
 # Function to draw (using blit function) image on the screen
 def player(x, y):
@@ -60,6 +69,20 @@ def enemyBoundary():
         enemyY += enemyY_change
 
 
+# Bullet
+def fire_bullet(x, y):
+    global bullet_state
+    bullet_state = "fire"
+    screen.blit(bulletImg, (x + 16, y + 10))
+
+
+def bullet_movement():
+    global bulletY
+    if bullet_state == "fire":
+        fire_bullet(playerX, bulletY)
+        bulletY -= bulletY_change
+
+
 # Loop of the Game, main logic
 windowRunning = True
 while windowRunning:  # we can access QUIT event when the window is running
@@ -80,6 +103,8 @@ while windowRunning:  # we can access QUIT event when the window is running
                 playerX_change = -2
             if event.key == pygame.K_RIGHT:  # then if the key is RIGHT arrow, move player to Right by 0.1
                 playerX_change = 2
+            if event.key == pygame.K_SPACE:
+                fire_bullet(playerX, bulletY)
 
         if event.type == pygame.KEYUP:  # if any keystroke pressed is released
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
@@ -92,6 +117,8 @@ while windowRunning:  # we can access QUIT event when the window is running
     # Enemy movement
     enemyX += enemyX_change
     enemyBoundary()
+    # Bullet movement
+    bullet_movement()
 
     player(playerX, playerY)
     enemy(enemyX, enemyY)
