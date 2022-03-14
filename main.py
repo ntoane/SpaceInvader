@@ -23,7 +23,8 @@ playerX_change = 0
 enemyImg = pygame.image.load("images/enemy.png")
 enemyX = random.randint(0, 736)
 enemyY = random.randint(50, 150)
-enemyX_change = 0
+enemyX_change = 0.3
+enemyY_change = 40
 
 
 # Function to draw (using blit function) image on the screen
@@ -35,6 +36,7 @@ def enemy(x, y):
     screen.blit(enemyImg, (enemyX, enemyY))
 
 
+# Checking for boundaries of spaceship so that it does not go out of bound
 def playerBoundary():
     global playerX
     global playerY
@@ -42,6 +44,18 @@ def playerBoundary():
         playerX = 0
     elif playerX >= 736:  # Cater for size of the player image
         playerX = 736
+
+
+def enemyBoundary():
+    global enemyX
+    global enemyY
+    global enemyX_change
+    if enemyX <= 0:
+        enemyX_change = 0.3
+        enemyY += enemyY_change
+    elif enemyX >= 736:
+        enemyX_change = -0.3
+        enemyY += enemyY_change
 
 
 # Loop of the Game, main logic
@@ -68,9 +82,13 @@ while windowRunning:  # we can access QUIT event when the window is running
                 # When either Left or Right key released, stop the X coordinate and maintain that position
                 playerX_change = 0
 
-    # After filling the screen with background color, draw the player image
+    # Player movement
     playerX += playerX_change  # Change the X coordinate
     playerBoundary()  # Apply boundaries accordingly
+    # Enemy movement
+    enemyX += enemyX_change
+    enemyBoundary()
+
     player(playerX, playerY)
     enemy(enemyX, enemyY)
 
