@@ -34,7 +34,7 @@ enemyY_change = 40
 bulletImg = pygame.image.load("images/bullet.png")
 bulletX = 0
 bulletY = 480
-bulletY_change = 5
+bulletY_change = 4
 bullet_state = "ready"
 
 
@@ -78,8 +78,14 @@ def fire_bullet(x, y):
 
 def bullet_movement():
     global bulletY
+    global bullet_state
+
+    if bulletY <= 0:
+        bulletY = 480
+        bullet_state = "ready"
+
     if bullet_state == "fire":
-        fire_bullet(playerX, bulletY)
+        fire_bullet(bulletX, bulletY)
         bulletY -= bulletY_change
 
 
@@ -100,11 +106,14 @@ while windowRunning:  # we can access QUIT event when the window is running
         # If keystroke is pressed check whether it is left or right keystroke
         if event.type == pygame.KEYDOWN:  # if any keystroke is pressed down
             if event.key == pygame.K_LEFT:  # then if the key is LEFT arrow, move player to Left by 0.1
-                playerX_change = -2
+                playerX_change = -2.5
             if event.key == pygame.K_RIGHT:  # then if the key is RIGHT arrow, move player to Right by 0.1
-                playerX_change = 2
+                playerX_change = 2.5
             if event.key == pygame.K_SPACE:
-                fire_bullet(playerX, bulletY)
+                if bullet_state == "ready":
+                    # Get the current x coordinate of the spaceship
+                    bulletX = playerX
+                    fire_bullet(bulletX, bulletY)
 
         if event.type == pygame.KEYUP:  # if any keystroke pressed is released
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
