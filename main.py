@@ -1,4 +1,5 @@
 import pygame
+import random
 
 # Initialize the pygame
 pygame.init()
@@ -18,10 +19,20 @@ playerX = 370
 playerY = 480
 playerX_change = 0
 
+# Enemy image
+enemyImg = pygame.image.load("images/enemy.png")
+enemyX = random.randint(0, 736)
+enemyY = random.randint(50, 150)
+enemyX_change = 0
+
 
 # Function to draw (using blit function) image on the screen
 def player(x, y):
     screen.blit(playerImg, (x, y))
+
+
+def enemy(x, y):
+    screen.blit(enemyImg, (enemyX, enemyY))
 
 
 def playerBoundary():
@@ -33,7 +44,7 @@ def playerBoundary():
         playerX = 736
 
 
-# Loop of the Game
+# Loop of the Game, main logic
 windowRunning = True
 while windowRunning:  # we can access QUIT event when the window is running
     # Background colour
@@ -61,5 +72,8 @@ while windowRunning:  # we can access QUIT event when the window is running
     playerX += playerX_change  # Change the X coordinate
     playerBoundary()  # Apply boundaries accordingly
     player(playerX, playerY)
+    enemy(enemyX, enemyY)
 
     pygame.display.update()
+
+    # Ended at 53:00 minutes
