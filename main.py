@@ -1,5 +1,6 @@
 import pygame
 import random
+import math
 
 # Initialize the pygame
 pygame.init()
@@ -36,6 +37,9 @@ bulletX = 0
 bulletY = 480
 bulletY_change = 4
 bullet_state = "ready"
+
+# Store player score
+score = 0
 
 
 # Function to draw (using blit function) image on the screen
@@ -89,6 +93,15 @@ def bullet_movement():
         bulletY -= bulletY_change
 
 
+def isCollision(enemy_x, enemy_y, bullet_x, bullet_y):
+    # Using formular from distance of two coordinates in math
+    distance = math.sqrt((math.pow((enemy_x - bullet_x), 2)) + (math.pow((enemy_y - bullet_y), 2)))
+    if distance < 27:
+        return True
+    else:
+        return False
+
+
 # Loop of the Game, main logic
 windowRunning = True
 while windowRunning:  # we can access QUIT event when the window is running
@@ -129,9 +142,21 @@ while windowRunning:  # we can access QUIT event when the window is running
     # Bullet movement
     bullet_movement()
 
+    # Detect collision
+    collision = isCollision(enemyX, enemyY, bulletX, bulletY)
+    if collision:  # Reset bullet to starting point and state ready to fire
+        bulletY = 480
+        bullet_state = "ready"
+        score += 1
+        # Reset enemy to starting point
+        enemyX = random.randint(0, 736)
+        enemyY = random.randint(50, 150)
+
+        print("Score: ", score)
+
     player(playerX, playerY)
     enemy(enemyX, enemyY)
 
     pygame.display.update()
 
-    # Ended at 53:00 minutes
+    # Ended at 1:34 minutes
