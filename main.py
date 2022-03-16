@@ -53,15 +53,24 @@ bullet_state = "ready"
 
 # Store player score
 score_value = 0
-font = pygame.font.Font('freesansbold.ttf', 32)
+score_text = pygame.font.Font('freesansbold.ttf', 32)
 textX = 10
 textY = 10
+
+# Game over text
+over_font = pygame.font.Font('freesansbold.ttf', 64)
 
 
 # Function to display score
 def show_score(x, y):
-    score = font.render("Score : " + str(score_value), True, (255, 255, 255))
+    score = score_text.render("Score : " + str(score_value), True, (255, 255, 255))
     screen.blit(score, (x, y))
+
+
+# Function to display Game Over text
+def game_over_text():
+    over_text = over_font.render("GAME OVER", True, (255, 255, 255))
+    screen.blit(over_text, (200, 250))
 
 
 # Function to draw (using blit function) image on the screen
@@ -88,6 +97,13 @@ def enemyBoundary():
 
     # Move every enemy in a list
     for n in range(num_of_enemies):
+        # Game over
+        if enemyY[n] > 440:  # Corresponding to the line of player
+            for j in range(num_of_enemies):
+                enemyY[j] = 2000  # Any big number that will move enemies out of screen
+            game_over_text()
+            break
+
         enemyX[n] += enemyX_change[n]
         if enemyX[n] <= 0:
             enemyX_change[n] = 1.5
