@@ -47,7 +47,16 @@ bulletY_change = 4
 bullet_state = "ready"
 
 # Store player score
-score = 0
+score_value = 0
+font = pygame.font.Font('freesansbold.ttf', 32)
+textX = 10
+textY = 10
+
+
+# Function to display score
+def show_score(x, y):
+    score = font.render("Score : " + str(score_value), True, (255, 255, 255))
+    screen.blit(score, (x, y))
 
 
 # Function to draw (using blit function) image on the screen
@@ -70,7 +79,7 @@ def playerBoundary():
 
 
 def enemyBoundary():
-    global enemyX, enemyY, enemyX_change, bulletY, bullet_state, score
+    global enemyX, enemyY, enemyX_change, bulletY, bullet_state, score_value
 
     # Move every enemy in a list
     for n in range(num_of_enemies):
@@ -87,12 +96,11 @@ def enemyBoundary():
         if collision:  # Reset bullet to starting point and state ready to fire
             bulletY = 480
             bullet_state = "ready"
-            score += 1
+            score_value += 1
             # Reset enemy to starting point
             enemyX[n] = random.randint(0, 736)
             enemyY[n] = random.randint(50, 150)
 
-            print("Score: ", score)
         # Display which image
         enemy(enemyX[n], enemyY[n], n)
 
@@ -164,8 +172,10 @@ while windowRunning:  # we can access QUIT event when the window is running
     enemyBoundary()
     # Bullet movement
     bullet_movement()
-
+    # Display player image
     player(playerX, playerY)
+    # Display score results
+    show_score(textX, textY)
 
     pygame.display.update()
 
